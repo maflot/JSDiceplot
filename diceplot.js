@@ -1,5 +1,3 @@
-import * as d3 from "d3";
-
 /*
   dicePlot – generic dice‐plot renderer (JS / D3 v7)
   cfg – {
@@ -21,7 +19,7 @@ import * as d3 from "d3";
     showLegend: boolean
   }
 */
-export function dicePlot(cfg) {
+export function diceplot(cfg) {
   /* --- defaults & args --------------------------------------------------- */
   const {
     data,

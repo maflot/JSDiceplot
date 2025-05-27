@@ -5,7 +5,7 @@
   <title>Interactive & Static Dice-plot Faces 1–6 Examples</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script type="module">
-    import { dicePlot } from './diceplot.js';  // assume dicePlot is available
+    import { diceplot } from './diceplot.js';  // assume dicePlot is available
 
     document.addEventListener('DOMContentLoaded', () => {
       const commonConfig = {
@@ -20,7 +20,7 @@
       for (let n = 1; n <= 6; n++) {
         const faces = Array.from({ length: n }, (_, i) => String(i + 1));
         const data = faces.map(f => ({ row: 'R', col: 'C', face: f }));
-        dicePlot({
+        diceplot({
           ...commonConfig,
           data,
           container: `#plot${n}`,
@@ -42,7 +42,7 @@
         }));
         const container = '#selectedPlot';
         d3.select(container).selectAll('*').remove();
-        dicePlot({
+        diceplot({
           ...commonConfig,
           data,
           container,
