@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive & Static Dice-plot Faces 1–6 Examples</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script type="module">
+    import { dicePlot } from './diceplot.js';  // assume dicePlot is available
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const commonConfig = {
+        x: 'col',
+        y: 'row',
+        z: 'face',
+        dotRadius: 10,
+        showLegend: false
+      };
+
+      // Static examples 1–6 (single grid cell)
+      for (let n = 1; n <= 6; n++) {
+        const faces = Array.from({ length: n }, (_, i) => String(i + 1));
+        const data = faces.map(f => ({ row: 'R', col: 'C', face: f }));
+        dicePlot({
+          ...commonConfig,
+          data,
+          container: `#plot${n}`,
+          width: 150,
+          height: 150
+        });
+      }
+
+      // Interactive selector: random 8×8 grid of dice
+      const select = document.getElementById('faceSelect');
+      function updateSelected() {
+        const n = +select.value;
+        const rows = Array.from({ length: 8 }, (_, i) => String.fromCharCode(65 + i));
+        const cols = Array.from({ length: 8 }, (_, i) => String(i + 1));
+        const data = [];
+        rows.forEach(r => cols.forEach(c => {
+          const face = String(Math.floor(Math.random() * n) + 1);
+          data.push({ row: r, col: c, face });
+        }));
+        const container = '#selectedPlot';
+        d3.select(container).selectAll('*').remove();
+        dicePlot({
+          ...commonConfig,
+          data,
+          container,
+          width: 600,
+          height: 600
+        });
+      }
+      select.addEventListener('change', updateSelected);
+      updateSelected(); // initial render
+    });
+  </script>
+  <style>
+    body { font-family: sans-serif; margin:20px; }
+    .container { display: flex; gap: 60px; }
+    .static-examples { display: grid; grid-template-columns: repeat(3,1fr); gap:20px; }
+    .demo-item { text-align: center; }
+    select { font-size: 16px; padding: 4px; margin-bottom:10px; }
+    svg { font-family: sans-serif; }
+  </style>
+</head>
+<body>
+  <h2>Interactive Dice Face Selector (8×8 Random Grid)</h2>
+  <label for="faceSelect">Choose face count: </label>
+  <select id="faceSelect">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6" selected>6</option>
+  </select>
+
+  <div class="container">
+    <!-- left: interactive random grid -->
+    <div>
+      <h3>Random Grid Plot</h3>
+      <div id="selectedPlot"></div>
+    </div>
+    <!-- right: static single-cell examples -->
+    <div>
+      <h3>Static Examples</h3>
+      <div class="static-examples">
+        <div class="demo-item"><h4>1</h4><div id="plot1"></div></div>
+        <div class="demo-item"><h4>2</h4><div id="plot2"></div></div>
+        <div class="demo-item"><h4>3</h4><div id="plot3"></div></div>
+        <div class="demo-item"><h4>4</h4><div id="plot4"></div></div>
+        <div class="demo-item"><h4>5</h4><div id="plot5"></div></div>
+        <div class="demo-item"><h4>6</h4><div id="plot6"></div></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
